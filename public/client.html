@@ -65,6 +65,17 @@
     init();
 
     function init() {
+        socket.on('connect', function () {
+            socket.emit('default', { color: color, name: name, inst: inst });
+        })
+
+        $('#name').on('change', updateName).on('blur', updateName);
+
+        function updateName() {
+            name = $(this).val();
+            console.log('new name: ', name);
+        }
+
         $('.color').each(function () {
             var $this = $(this);
             $this.css('background-color', $this.attr('data-color'));
