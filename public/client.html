@@ -101,6 +101,7 @@
            console.log({
                color: color, name: name, inst: inst
            })
+           socket.emit('beat', {color: color, name: name, inst: inst})
         });
     }
 })();
