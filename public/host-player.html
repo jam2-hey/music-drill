@@ -2,8 +2,95 @@
 <html>
 <head>
     <title>Host Player Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
+<canvas id='demoCanvas' width='1024' height='768'/>
+<script>
+    var stage = null;
+    var players = [];
 
+    var findPlayerByName = function(name){
+        for(var c=0;c<players.length;c++){
+            if(players[c].name === name){
+                return players[c];
+            }
+        }
+        return null;
+    };
+
+    var registerKeyboard = function() {
+        $('body').on('keydown', function(e){
+            var keyCode = e.keyCode;
+            var key = String.fromCharCode(keyCode).toLowerCase();
+            switch(key){
+            case 'q':
+                getHitted({name: 'john'});
+                break;
+            case 'w':
+                getHitted({name: 'mary'});
+                break;
+            }
+        });
+    };
+
+    function getHitted(payload){
+        var p = findPlayerByName(payload.name);
+        if(!p){
+            addPlayer(payload);
+        }else{
+            updatePlayer(p, payload);
+        }
+    }
+
+    var prepareStage = function(){
+        //Create a stage by getting a reference to the canvas
+        stage = new createjs.Stage("demoCanvas");
+        stage.s = new createjs.Shape();
+        stage.s.graphics.beginFill("#000").drawRect(0, 0, 1024, 768);
+        stage.addChild(stage.s);
+        setInterval(function(){
+            stage.update();
+        }, 30);
+    };
+
+    var addPlayer = function(player){
+        player.text = new createjs.Text(player.name, "50px Arial", "#fff");
+        player.text.x = Math.random() * 1024;
+        player.text.y = Math.random() * 768;
+        stage.addChild(player.text);
+        players.push(player);
+    };
+
+    var getRandomColor = function() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    var updatePlayer = function(player, payload){
+        player.text.color = getRandomColor();
+    };
+
+    registerKeyboard();
+    prepareStage();
+
+    // $('body').css('background', '#000');    
+    // $('body').append()
+
+    var socket = io(':3000/listener');
+    socket.on('beat', function (data) {
+        console.log('beat');
+        console.log(data);
+        getHitted(data);
+        // data = { color: '#e74c3c', name: 'John', inst: 'kick' }
+    })
+
+</script>
 </body>
 </html>
