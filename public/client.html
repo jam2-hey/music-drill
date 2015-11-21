@@ -38,6 +38,9 @@
         .inst-hat {
             background: #3498db;
         }
+        .tap {
+            background: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -89,6 +92,7 @@
             $('.color').removeClass('active');
             $this.addClass('active');
             color = thisColor;
+            $('.tap').css('background-color', color);
         });
         $('.inst').on('click', function () {
             var $this = $(this);
