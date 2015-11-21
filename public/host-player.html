@@ -57,9 +57,11 @@
     };
 
     var addPlayer = function(player){
+        var x = Math.random() * 1024;
+        var y = Math.random() * 768;
         player.text = new createjs.Text(player.name, "50px Arial", "#fff");
-        player.text.x = Math.random() * 1024;
-        player.text.y = Math.random() * 768;
+        player.text.x = x;
+        player.text.y = y;
         stage.addChild(player.text);
         players.push(player);
     };
@@ -89,8 +91,8 @@
     })
 
 </script>
-<audio controls>
-    <source src="horse.ogg" type="audio/ogg">
+<audio autoplay loop>
+    <source src="ogg" type="audio/ogg">
 </audio>
 </body>
 </html>
