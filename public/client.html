@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>No Title</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/jquery-2.1.4.min.js"></script>
+    <style>
+        html, body { padding: 0; margin: 0; }
+        label { display: block; text-align: center; line-height: 2em; }
+        button.sbtn { display: block; float: left; border: 0; padding: 20px 40px; width: 50%; box-sizing: border-box; font-size: 16px; }
+        button.active {
+            box-shadow: 5px 5px 10px 1px rgba(0,0,0,.5) inset;
+            color: #fff;
+        }
+        input { padding: 20px 40px; width: 100%; box-sizing: border-box; font-size: 16px; }
+        input:focus { outline: none; }
+        button:focus { outline: none; }
+        .action {
+            position: absolute;
+            bottom: 0;
+            left: 0; right: 0;
+        }
+        button.tap {
+            display: block;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            margin: 20px auto;
+            line-height: 100px;
+            border: 0;
+            font-size: 30px;
+        }
+        .inst-kick {
+            background: #e74c3c;
+        }
+        .inst-hat {
+            background: #3498db;
+        }
+    </style>
+</head>
+<body>
+<label>Name</label>
+<input type="text" id="name" value="John">
+<label>Instrument</label>
+    <button class="sbtn inst inst-kick active" data-type="kick">Kick</button>
+    <button class="sbtn inst inst-hat" data-type="hat">Hat</button>
+
+<label>Color</label>
+    <button class="sbtn color active" data-color="#e74c3c">Red</button>
+    <button class="sbtn color" data-color="#e67e22">Orange</button>
+    <button class="sbtn color" data-color="#f1c40f">Yellow</button>
+    <button class="sbtn color" data-color="#2ecc71">Green</button>
+    <button class="sbtn color" data-color="#3498db">Blue</button>
+<div class="action">
+    <button class="tap">TAP</button>
+</div>
+<script>
+(function () {
+    var color = '#e74c3c';
+    var name = 'John';
+    var inst = 'kick';
+
+    init();
+
+    function init() {
+        $('.color').each(function () {
+            var $this = $(this);
+            $this.css('background-color', $this.attr('data-color'));
+        });
+
+        $('.color').on('click', function () {
+            var $this = $(this);
+            var thisColor = $this.attr('data-color');
+            $('.color').removeClass('active');
+            $this.addClass('active');
+            color = thisColor;
+        });
+        $('.inst').on('click', function () {
+            var $this = $(this);
+            var thisInst = $this.attr('data-type');
+            $('.inst').removeClass('active');
+            $this.addClass('active');
+            inst = thisInst;
+        });
+        $('.tap').on('touchstart', function () {
+           console.log({
+               color: color, name: name, inst: inst
+           })
+        });
+    }
+})();
+</script>
+</body>
+</html>
