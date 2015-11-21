@@ -36,14 +36,14 @@
         });
     };
 
-    function getHitted(payload){
+    var getHitted = function(payload){
         var p = findPlayerByName(payload.name);
         if(!p){
             addPlayer(payload);
         }else{
             updatePlayer(p, payload);
         }
-    }
+    };
 
     var prepareStage = function(){
         //Create a stage by getting a reference to the canvas
@@ -64,6 +64,10 @@
         players.push(player);
     };
 
+    var updatePlayer = function(player, payload){
+        player.text.color = getRandomColor();
+    };
+
     var getRandomColor = function() {
         var letters = '0123456789ABCDEF'.split('');
         var color = '#';
@@ -71,17 +75,10 @@
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
-    }
-
-    var updatePlayer = function(player, payload){
-        player.text.color = getRandomColor();
     };
 
     registerKeyboard();
     prepareStage();
-
-    // $('body').css('background', '#000');    
-    // $('body').append()
 
     var socket = io(':3000/listener');
     socket.on('beat', function (data) {
